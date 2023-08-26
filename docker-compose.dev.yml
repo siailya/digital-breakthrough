@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  amm-server:
+    container_name: amm-server
+    build: server/.
+    ports:
+      - "8000:8000"
+
+  aam-client:
+    container_name: aam-client
+    build: client/.
+    ports:
+      - "3000:80"

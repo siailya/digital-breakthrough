@@ -1,6 +1,8 @@
 from natasha import AddrExtractor, MorphVocab
 from typing import Dict
 import pandas as pd
+import re
+import string
 
 
 NATASHA_TO_DOMAIN_TYPE_MAPPING = {
@@ -20,7 +22,7 @@ NATASHA_TO_DOMAIN_TYPE_MAPPING = {
     "строение": "structure",
     "улица": "street",  
     "шоссе": "street",
-    "индекс": "post_index"
+    "индекс": "post_prefix"
 }
 
 
@@ -58,6 +60,15 @@ class FeatureExtractor:
         for i in self.abbv_map:
             text = text.replace(i, self.abbv_map[i] + " ")
         return text
+    
+    
+    def clear_text(self, text: str) -> str:
+        text = text.lower()
+        text = re.sub("(\A|[^0-9])([0-9]{6})([^0-9]|$)", "", text)
+        text = self.resolve_abbv(text)
+        text = text.translate(str.maketrans('', '', string.punctuation))
+        
+        return text
         
         
     def get_features(self, text: str) -> Dict:
@@ -68,11 +79,17 @@ class FeatureExtractor:
             "liter": None,
             "municipality_id": None,
             "src_text": text,
+            "preproc_text": None,
             "street": None,
-            "post_index": None
+            "post_prefix": None,
+            "structure": None
         }
         
         text = self.resolve_abbv(text)
+        result["preproc_text"] = text.lower()
+        result["preproc_text"] = re.sub("(\A|[^0-9])([0-9]{6})([^0-9]|$)", "", result["preproc_text"])
+        result["preproc_text"] = self.resolve_abbv(result["preproc_text"])
+        result["preproc_text"] = result["preproc_text"].translate(str.maketrans('', '', string.punctuation))
         
         matches = self.extractor.find(text)
         
@@ -92,7 +109,7 @@ class FeatureExtractor:
                     
             elif NATASHA_TO_DOMAIN_TYPE_MAPPING[j.type] == "district_id":
                 if self.district_index['name'].str.contains(j.value).sum() > 0:
-                    result[NATASHA_TO_DOMAIN_TYPE_MAPPING[j.type]] = self.district_index[self.district_index['name'] == j.value]['id'].iloc[0] 
+                    result[NATASHA_TO_DOMAIN_TYPE_MAPPING[j.type]] = self.district_index[self.district_index['name'].str.contains(j.value)]['id'].iloc[0] 
                 continue
             
             result[NATASHA_TO_DOMAIN_TYPE_MAPPING[j.type]] = j.value 

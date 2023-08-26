@@ -49,7 +49,7 @@ def main(config):
                 config.bidirectional,
                 config.dropout,
                 ) 
-
+    model._save_to_state_dict()
     model.to(device)
 
     optimizer = optim.Adam(model.parameters(), lr=config.lr)

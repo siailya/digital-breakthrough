@@ -4,7 +4,7 @@ import argparse
 def get_args(data_dir, cache_dir, model_dir, log_dir):
     parser = argparse.ArgumentParser(description='')
 
-    parser.add_argument("--model_name", default="TextMatchRCNN",
+    parser.add_argument("--model_name", default="AMM",
                         type=str, help="model name")
     parser.add_argument("--seed", default=1234, type=int, help="seed")
 
@@ -31,12 +31,12 @@ def get_args(data_dir, cache_dir, model_dir, log_dir):
     #                     action="store_true",
     #                     help="Run or not.")
 
-    parser.add_argument("--print_step", default=10,
+    parser.add_argument("--print_step", default=1,
                         type=int, help="steps of print log")
 
     # hyper parameter
-    parser.add_argument("--batch_size", default=2, type=int)
-    parser.add_argument("--epoch_num", default=20, type=int)
+    parser.add_argument("--batch_size", default=32, type=int)
+    parser.add_argument("--epoch_num", default=30, type=int)
     parser.add_argument("--dropout", default=0.5, type=float)
     parser.add_argument("--lr", default=0.0001, type=float)
 
@@ -44,13 +44,13 @@ def get_args(data_dir, cache_dir, model_dir, log_dir):
     parser.add_argument("--output_dim", default=2, type=int)
 
     # TextRNN
-    parser.add_argument("--hidden_size", default=400, type=int, help="hidden layer dimension")
-    parser.add_argument('--num_layers', default=2, type=int, help='hidden layer')
+    parser.add_argument("--hidden_size", default=300, type=int, help="hidden layer dimension")
+    parser.add_argument('--num_layers', default=3, type=int, help='hidden layer')
     parser.add_argument("--bidirectional", default=True, type=bool)
 
     parser.add_argument(
         '--word_embedding_dim',
-        default=128, type=int,
+        default=256, type=int,
         help='word embedding size (default: 300)')
 
     config = parser.parse_args()

@@ -14,7 +14,6 @@ class CustomTextDataset(Dataset):
     def __len__(self):
         return len(self.labels)
     def __getitem__(self, idx):
-        print(idx)
         label = self.labels[idx]
         address1 = self.x[idx]
         address2 = self.y[idx]
@@ -24,7 +23,7 @@ class CustomTextDataset(Dataset):
 
 
 def address_emb(model,address1, address2, device):
-    k = 10
+    k = 13
     N = len(address1)
     vec1 = []
     vec2 = []
@@ -32,10 +31,11 @@ def address_emb(model,address1, address2, device):
         tokens = list(tokenize(address1[i]))
         tokens = [_.text for _ in tokens]
         predict = torch.tensor([model.wv.get_vector(token) for token in tokens])
-        print(predict.shape)
         while predict.shape[0] <k:
             predict = torch.vstack([predict, torch.zeros((1,predict.shape[1]))])
-            print(predict.shape)
+        
+        if predict.shape[0] > k:
+            predict = predict[:k]
         #predict = torch.mean(predict, axis=0).reshape(-1,1)
         #predict = predict / torch.linalg.norm(predict)
         vec1.append(predict)
@@ -47,6 +47,8 @@ def address_emb(model,address1, address2, device):
         while predict.shape[0] <k:
             predict = torch.vstack([predict, torch.zeros((1,predict.shape[1]))])
 
+        if predict.shape[0] > k:
+            predict = predict[:k]
         #predict = torch.mean(predict, axis=0).reshape(-1,1)
         #predict = predict / torch.linalg.norm(predict)
         vec2.append(predict)
@@ -56,41 +58,47 @@ def address_emb(model,address1, address2, device):
     return vec1, vec2
 
 
-def load_address_match_data(path, device, batch_size, save = False):
+def load_address_match_data(path, device, batch_size, save = True, load=False):
 
     print("********************data processing*************************")
+    if load == True:
+       train_dataloader = torch.load('/Users/kirill/Desktop/CP/digital-breakthrough/Utils/data/train_iter.pt')
+       dev_dataloader = torch.load('/Users/kirill/Desktop/CP/digital-breakthrough/Utils/data/dev_iter.pt')
+       test_dataloader = torch.load('/Users/kirill/Desktop/CP/digital-breakthrough/Utils/data/test_iter.pt')
     # all shenzhen data
-    train_file_path = f'{path}train.csv'
-    dev_file_path = f'{path}dev.csv'
-    test_file_path = f'{path}test.csv'
 
-    reader = lambda x: pd.read_csv(x)
+    else:
+        train_file_path = f'{path}train.csv'
+        dev_file_path = f'{path}dev.csv'
+        test_file_path = f'{path}test.csv'
 
-    train = reader(train_file_path)
-    dev = reader(dev_file_path)
-    test = reader(test_file_path)
+        reader = lambda x: pd.read_csv(x)
 
-    model = FastText.load('/Users/kirill/Desktop/CP/digital-breakthrough/Utils/fasttext.model')
+        train = reader(train_file_path)[:10000]
+        dev = reader(dev_file_path)[:1000]
+        test = reader(test_file_path)[:100]
 
-    emb = lambda x, y: address_emb(model,x, y, device)
+        model = FastText.load('/Users/kirill/Desktop/CP/digital-breakthrough/Utils/fasttext.model')
 
-    vec1_train, vec2_train =  emb(list(train['address1']), list(train['address2']))
-    labels_train = torch.tensor(train['label'], device = device)
-    vec1_dev, vec2_dev = emb(list(dev['address1']), list(dev['address2']))
-    labels_dev = torch.tensor(dev['label'], device = device)
-    vec1_test, vec2_test=  emb(list(test['address1']), list(test['address2']))
-    labels_test =torch.tensor(test['label'], device = device)
-    train_iter = CustomTextDataset(vec1_train, vec2_train, labels_train )
-    dev_iter = CustomTextDataset(vec1_dev, vec2_dev, labels_dev )
-    test_iter = CustomTextDataset(vec1_test, vec2_test, labels_test)
+        emb = lambda x, y: address_emb(model,x, y, device)
 
-    train_dataloader = DataLoader(train_iter, batch_size = batch_size, shuffle= True)
-    dev_dataloader = DataLoader(dev_iter, batch_size= batch_size, shuffle= True)
-    test_dataloader = DataLoader(test_iter, batch_size= batch_size, shuffle= True)
-    print("Successful Loading Dataset")
-    if save == True:
-        torch.save('train_iter' )
-        torch.save('dev_iter')
-        torch.save('test_iter')
+        vec1_train, vec2_train =  emb(list(train['address1']), list(train['address2']))
+        labels_train = torch.tensor(train['label'], device = device)
+        vec1_dev, vec2_dev = emb(list(dev['address1']), list(dev['address2']))
+        labels_dev = torch.tensor(dev['label'], device = device)
+        vec1_test, vec2_test=  emb(list(test['address1']), list(test['address2']))
+        labels_test =torch.tensor(test['label'], device = device)
+        train_iter = CustomTextDataset(vec1_train, vec2_train, labels_train )
+        dev_iter = CustomTextDataset(vec1_dev, vec2_dev, labels_dev )
+        test_iter = CustomTextDataset(vec1_test, vec2_test, labels_test)
 
+        train_dataloader = DataLoader(train_iter, batch_size = batch_size, shuffle= True)
+        dev_dataloader = DataLoader(dev_iter, batch_size= batch_size, shuffle= True)
+        test_dataloader = DataLoader(test_iter, batch_size= batch_size, shuffle= True)
+        print("Successful Loading Dataset")
+        if save == True:
+            torch.save(train_iter, '/Users/kirill/Desktop/CP/digital-breakthrough/Utils/data/train_iter.pt')
+            torch.save(dev_iter, '/Users/kirill/Desktop/CP/digital-breakthrough/Utils/data/dev_iter.pt')
+            torch.save(test_iter, '/Users/kirill/Desktop/CP/digital-breakthrough/Utils/data/test_iter.pt')
+            print('save_dataset')
     return train_dataloader, dev_dataloader, test_dataloader

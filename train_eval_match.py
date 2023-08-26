@@ -94,7 +94,7 @@ def train(epoch_num, model, train_dataloader, dev_dataloader, optimizer, criteri
                 #if dev_report['macro avg']['f1-score'] > best_dev_f1:
                 best_dev_f1 = dev_report['macro avg']['f1-score']
                 print('***********save model...*************')
-                torch.save(model.state_dict(), out_model_file)
+
                 last_improve = global_step
                 model.train()
 
@@ -105,7 +105,7 @@ def train(epoch_num, model, train_dataloader, dev_dataloader, optimizer, criteri
         if flag == True:
             writer.close()
             break
-
+    torch.save(model.state_dict(), out_model_file)
     writer.close()
 
 

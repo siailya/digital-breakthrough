@@ -1,0 +1,38 @@
+{
+  "common": {
+    "primaryColor": "#1D609EFF",
+    "primaryColorHover": "#2D83D3FF",
+    "primaryColorPressed": "#3D91DEFF",
+    "primaryColorSuppl": "#1D609EFF",
+    "borderRadius": "10px",
+    "fontSizeMedium": "16px"
+  },
+  "Button": {
+    "paddingMedium": "24px 30px",
+    "fontSizeSmall": "16px",
+    "textColorPressed": "#3D91DEFF",
+    "textColorTextPressed": "#3D91DEFF"
+  },
+  "Input": {
+    "paddingMedium": "0 20px",
+    "heightMedium": "48px"
+  },
+  "List": {
+    "fontSize": "16px"
+  },
+  "Dropdown": {
+    "padding": "16px 20px"
+  },
+  "Table": {},
+  "DataTable": {
+    "paginationMargin": "20px 0 0 0",
+    "tdPaddingMedium": "12px"
+  },
+  "Checkbox": {
+    "borderRadius": "4px"
+  },
+  "Card": {},
+  "Space": {
+    "gapMedium": "20px"
+  }
+}

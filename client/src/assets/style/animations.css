@@ -1,0 +1,196 @@
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: all .3s ease;
+}
+
+.slide-up-enter-to, .slide-up-leave {
+  transform: translateY(-100px);
+}
+
+.slide-up-enter, .slide-up-leave-to {
+  transform: translateY(-100px);
+}
+
+.rotate-enter-active, .rotate-leave-active {
+  transition: all .3s ease;
+}
+
+.rotate-enter-to, .rotate-leave {
+  transform: rotate(0);
+}
+
+.rotate-enter, .rotate-leave-to {
+  transform: rotate(360deg);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s ease;
+}
+
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.child-view {
+  transition: all .3s ease;
+}
+
+.projects-list-enter, .projects-list-leave-to {
+  opacity: 0;
+  transform: translateY(10vh);
+  transition: all .5s ease;
+}
+
+.projects-list-leave-active {
+  position: absolute;
+  transform: translateY(10vh);
+  opacity: 0;
+  transition: all .5s ease;
+}
+
+.projects-list-enter-active {
+  transform: translateY(10vh);
+  opacity: 0;
+  transition: all .5s ease;
+}
+
+.projects-list-move {
+  transition: all .5s ease;
+}
+
+.timeline-enter, .timeline-leave-to {
+  opacity: 0;
+  transform: translateY(10vh);
+}
+
+.timeline-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+.timeline-move {
+  transition: transform .8s ease;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.75s ease-out;
+}
+
+
+.slide-enter-to {
+  position: absolute;
+  right: 0;
+}
+
+
+.slide-enter-from {
+  position: absolute;
+  right: -100%;
+}
+
+
+.slide-leave-to {
+  position: absolute;
+  left: -100%;
+}
+
+
+.slide-leave-from {
+  position: absolute;
+  left: 0;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+.slide-down-leave-from,
+.slide-down-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide-down-leave-to,
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.line-grow-enter-from,
+.line-grow-leave-to {
+  transform: scaleX(0);
+}
+.line-grow-enter-to,
+.line-grow-leave-from {
+  transform: scaleX(100%);
+}
+
+.projects-list-enter, .projects-list-leave-to {
+  opacity: 0;
+  transform: translateY(10vh);
+  transition: all .5s ease;
+}
+
+.projects-list-leave-active {
+  position: absolute;
+  transform: translateY(10vh) scale(0.01);
+  opacity: 0;
+  transition: all .5s ease;
+  max-width: 20%;
+  margin: 0 auto;
+  left: 40%;
+  top: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .projects-list-leave-active {
+    max-width: 90%;
+    left: 0;
+  }
+}
+
+
+.projects-list-enter-active {
+  transform: translateY(10vh);
+  opacity: 0;
+  transition: all .5s ease;
+}
+
+.projects-list-move {
+  transition: all .5s ease;
+}
+
+.timeline-list-enter, .timeline-list-leave-to, .timeline-list-enter-from {
+  opacity: 0;
+  transform: translateY(10vh) scale(0.01);
+  transition: all .5s ease;
+  z-index: -1;
+}
+
+.timeline-list-leave-active {
+  position: absolute;
+  transform: translateY(10vh) scale(0.01);
+  opacity: 0;
+  transition: all .5s ease;
+  width: 100%;
+  margin: 0 auto;
+  top: 0;
+}
+
+.timeline-list-move {
+  transition: all .5s ease;
+}

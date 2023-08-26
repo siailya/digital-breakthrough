@@ -4,7 +4,7 @@ import torch
 import time
 from tensorboardX import SummaryWriter
 from Utils.utils import classifiction_metric
-
+from tqdm import tqdm
 
 
 def train(epoch_num, model, train_dataloader, dev_dataloader, optimizer, criterion,
@@ -19,7 +19,7 @@ def train(epoch_num, model, train_dataloader, dev_dataloader, optimizer, criteri
     all_acc, all_f1 = np.array([], dtype=float), np.array([], dtype=float)
     all_dev_acc, all_dev_f1 = np.array([], dtype=float), np.array([], dtype=float)
 
-    for epoch in range(int(epoch_num)):
+    for epoch in tqdm(range(int(epoch_num))):
         print('---------------- Epoch: {} -----------------'.format(epoch+1))
         epoch_loss = 0
         train_steps = 0
@@ -29,19 +29,19 @@ def train(epoch_num, model, train_dataloader, dev_dataloader, optimizer, criteri
         all_preds = np.array([], dtype=int)
         all_labels = np.array([], dtype=int)
 
-        for step, batch in enumerate(train_dataloader):
+        for idx, batch in enumerate(train_dataloader):
             model.train()
             optimizer.zero_grad()
-            logits = model(batch.address1, batch.address2)
+            logits = model(batch['address1'],batch['address2'])
 
 
             '''loss'''
-            loss = criterion(logits, batch.label)
+            loss = criterion(logits, batch['label'])
             if isPrint:
                 print("cls_loss={}".format(loss))
                 isPrint = False
 
-            labels = batch.label.detach().cpu().numpy()
+            labels = batch['label'].detach().cpu().numpy()
             preds = np.argmax(logits.detach().cpu().numpy(), axis=1)
 
             loss.backward()
@@ -91,11 +91,11 @@ def train(epoch_num, model, train_dataloader, dev_dataloader, optimizer, criteri
 
 
                 # f1
-                if dev_report['macro avg']['f1-score'] > best_dev_f1:
-                    best_dev_f1 = dev_report['macro avg']['f1-score']
-                    print('***********save model...*************')
-                    torch.save(model.state_dict(), out_model_file)
-                    last_improve = global_step
+                #if dev_report['macro avg']['f1-score'] > best_dev_f1:
+                best_dev_f1 = dev_report['macro avg']['f1-score']
+                print('***********save model...*************')
+                torch.save(model.state_dict(), out_model_file)
+                last_improve = global_step
                 model.train()
 
                 if global_step - last_improve > 20000:
@@ -120,12 +120,12 @@ def evaluate(model, iterator, criterion, label_list, device, is_test=False):
 
 
     with torch.no_grad():
-        for batch in iterator:
-            logits = model(batch.address1, batch.address2)
+        for idx, batch in enumerate(iterator):
+            logits = model(batch['address1'],batch['address2'] )
 
             '''loss'''
-            loss = criterion(logits, batch.label)
-            labels = batch.label.detach().cpu().numpy()
+            loss = criterion(logits, batch['label'])
+            labels = batch['label'].detach().cpu().numpy()
             preds = np.argmax(logits.detach().cpu().numpy(), axis=1)
             all_preds = np.append(all_preds, preds)
             all_labels = np.append(all_labels, labels)

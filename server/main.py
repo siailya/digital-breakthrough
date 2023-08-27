@@ -1,6 +1,8 @@
+import json
+
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 
 from data.dto import PackageSearchDTO
@@ -42,6 +44,25 @@ async def autocomplete(query: str):
 @app.post("/package_search")
 def package_search(data: PackageSearchDTO):
     return data.values
+
+
+@app.post("/file_process")
+async def file_process(file: UploadFile):
+    if file.filename.split(".")[-1] == "txt":
+        content = (await file.read()).decode("utf-8").replace("\r", "").split("\n")
+    elif file.filename.split(".")[-1] == "json":
+        content = json.loads((await file.read()).decode("utf-8"))
+    else:
+        return HTTPException(415)
+
+    result = []
+    for address in content:
+        result.append({
+            "original_address": address,
+            "search_results": await ml_service.search_address(fix_lang_text_problems(address, "./utils/dict.txt"))
+        })
+
+    return result
 
 
 if __name__ == '__main__':

@@ -33,7 +33,14 @@ def check():
 
 @app.get("/api/search")
 async def search(query: str):
-    return await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
+    result = await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
+    return {
+        "success": len(result) != 0,
+        "query": {
+            "address": query
+        },
+        "result": result
+    }
 
 
 @app.get("/api/autocomplete")
@@ -63,8 +70,8 @@ async def file_process(file: UploadFile):
     result = []
     for address in content:
         result.append({
-            "original_address": address,
-            "search_results": await ml_service.search_addresses(fix_lang_text_problems(address, "./utils/dict.txt"))
+            "query": address,
+            "result": await search(address)
         })
 
     return result

@@ -25,8 +25,8 @@ class MLService:
 
         for p in predictions:
             results.append({
-                "id": p[0],
-                "full_address": self.model_wrapper.get_address_from_id(p[0]).values[0],
+                "target_building_id": p[0],
+                "target_address": self.model_wrapper.get_address_from_id(p[0]).values[0],
                 "confident": p[1]
             })
 

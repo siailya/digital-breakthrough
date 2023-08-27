@@ -7,19 +7,10 @@ services:
     ports:
       - "8001:8000"
     volumes:
-      - amm_model:/app/model
+      - ./server/model:/app/model
 
   aam-client:
     container_name: aam-client
     image: siailyadev/amm-client:0.0.5
     ports:
       - "3000:80"
-
-
-volumes:
-  amm_model:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/root/512_new_fasttext'

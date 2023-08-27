@@ -52,12 +52,9 @@ const fileUploadLoading = ref(false)
 const customRequest = ({
                          file,
                          data,
-                         headers,
-                         withCredentials,
                          action,
                          onFinish,
                          onError,
-                         onProgress
                        }: UploadCustomRequestOptions) => {
   fileUploadLoading.value = true
   const formData = new FormData()
@@ -76,7 +73,7 @@ const customRequest = ({
       fileUploadOutput.value = JSON.stringify(data, null, 4)
       onFinish()
     })
-    .catch((error) => {
+    .catch(() => {
       onError()
     })
     .finally(() => {

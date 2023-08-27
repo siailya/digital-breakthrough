@@ -11,7 +11,7 @@ from utils.language_utils import fix_lang_text_problems
 
 load_dotenv()
 
-app = FastAPI()
+app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 origins = ["*"]
 
@@ -33,17 +33,29 @@ def check():
 
 @app.get("/api/search")
 async def search(query: str):
-    return await ml_service.search_address(fix_lang_text_problems(query, "./utils/dict.txt"))
+    result = await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
+    return {
+        "success": len(result) != 0,
+        "query": {
+            "address": query
+        },
+        "result": result
+    }
 
 
 @app.get("/api/autocomplete")
 async def autocomplete(query: str):
-    return await ml_service.search_address(fix_lang_text_problems(query, "./utils/dict.txt"))
+    result = await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
+    return list(map(lambda x: x["target_address"], result))
 
 
 @app.post("/api/package_search")
-def package_search(data: PackageSearchDTO):
-    return data.values
+async def package_search(data: PackageSearchDTO):
+    result = []
+    for address in filter(lambda x: x != '', data.values):
+        result.append({"query": address, "result": await search(address)})
+
+    return result
 
 
 @app.post("/api/file_process")
@@ -58,8 +70,8 @@ async def file_process(file: UploadFile):
     result = []
     for address in content:
         result.append({
-            "original_address": address,
-            "search_results": await ml_service.search_address(fix_lang_text_problems(address, "./utils/dict.txt"))
+            "query": address,
+            "result": await search(address)
         })
 
     return result

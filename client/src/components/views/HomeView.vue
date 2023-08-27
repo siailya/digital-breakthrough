@@ -26,6 +26,7 @@
                 <n-form-item label="Вывод">
                     <n-input :loading="singleLoading" :value="singleOutput" placeholder="Нет результатов"
                              readonly
+                             rows="20"
                              type="textarea"></n-input>
                 </n-form-item>
             </div>
@@ -34,18 +35,24 @@
         <n-tab-pane name="packet" tab="Пакетное распознавание">
             <div style="max-width: 998px; margin: auto; display:flex; gap: 24px">
                 <n-form-item label="Ввод" style="width: 100%;">
-                    <n-input v-model:value="packageInput" type="textarea" placeholder="Введите адреса (каждый с новой строки)"/>
+                    <n-input v-model:value="packageInput" placeholder="Введите адреса (каждый с новой строки)" rows="20"
+                             type="textarea"/>
                 </n-form-item>
 
-                <n-button style="margin: auto" type="primary" @click="packageRecognize">
+                <n-button style="margin: auto" type="primary" @click="packageRecognize" :loading="packageLoading">
                     →
                 </n-button>
 
-
                 <n-form-item label="Вывод" style="width: 100%;">
-                    <n-input :loading="packageLoading" :value="packageOutput" placeholder="Нет результатов"
-                             readonly
-                             type="textarea"></n-input>
+                    <n-collapse>
+                        <n-collapse-item v-for="answer in packageOutput" :title="answer?.query">
+                            <n-input :loading="packageLoading" :value="JSON.stringify(answer, null, 4)"
+                                     placeholder="Нет результатов"
+                                     readonly
+                                     rows="20"
+                                     type="textarea"></n-input>
+                        </n-collapse-item>
+                    </n-collapse>
                 </n-form-item>
             </div>
         </n-tab-pane>
@@ -71,6 +78,7 @@
                 <n-form-item label="Вывод">
                     <n-input :loading="autoCompleteLoading" :value="autoCompleteOutput" placeholder="Нет результатов"
                              readonly
+                             rows="20"
                              type="textarea"></n-input>
                 </n-form-item>
             </div>
@@ -93,7 +101,7 @@ const singleRecognize = async () => {
   if (singleInput.value) {
     singleLoading.value = true
     axiosInstance.value.get("/search?query=" + singleInput.value).then((r) => {
-      singleOutput.value = r.data
+      singleOutput.value = JSON.stringify(r.data, null, 4)
     }).finally(() => {
       singleLoading.value = false
     })
@@ -103,13 +111,13 @@ const singleRecognize = async () => {
 
 const packageLoading = ref(false)
 const packageInput = ref("")
-const packageOutput = ref("")
+const packageOutput = ref<any[]>([])
 
 const packageRecognize = () => {
-    if (packageInput.value) {
+  if (packageInput.value) {
     packageLoading.value = true
     axiosInstance.value.post("/package_search", {values: packageInput.value.split("\n")}).then((r) => {
-      packageOutput.value = r.data.join("\n")
+      packageOutput.value = r.data
     }).finally(() => {
       packageLoading.value = false
     })
@@ -130,7 +138,7 @@ watchEffect(async () => {
 
     autoCompleteDebounceTimer.value = setTimeout(() => {
       axiosInstance.value.get("/autocomplete?query=" + autoCompleteInput.value).then((r) => {
-        autoCompleteOutput.value = r.data
+        autoCompleteOutput.value = r.data.join("\n")
       }).finally(() => {
         autoCompleteLoading.value = false
       })

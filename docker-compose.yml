@@ -3,7 +3,7 @@ version: "3.9"
 services:
   amm-server:
     container_name: amm-server
-    image: siailyadev/amm-server:0.0.2
+    image: siailyadev/amm-server:0.0.5
     ports:
       - "8001:8000"
     volumes:
@@ -11,7 +11,7 @@ services:
 
   aam-client:
     container_name: aam-client
-    image: siailyadev/amm-client:0.0.2
+    image: siailyadev/amm-client:0.0.5
     ports:
       - "3000:80"
 

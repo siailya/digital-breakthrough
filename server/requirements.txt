@@ -5,3 +5,5 @@ python-dotenv==1.0.0
 python-multipart
 gensim==4.3.2
 razdel==0.5.0
+pandas==1.4.1
+natasha==1.6.0

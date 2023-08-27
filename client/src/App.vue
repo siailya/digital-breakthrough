@@ -92,7 +92,7 @@ import axios from "axios";
 
 const router = useRouter()
 
-const baseApiUrl: Ref<string> = ref("http://localhost:8000/api")
+const baseApiUrl: Ref<string> = ref("https://amm.flint3s.ru/api")
 const baseApiUrlError = ref(false)
 const showSettingsModal = ref(false)
 

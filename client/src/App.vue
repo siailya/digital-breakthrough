@@ -92,7 +92,7 @@ import axios from "axios";
 
 const router = useRouter()
 
-const baseApiUrl: Ref<string> = ref("http://localhost:8000")
+const baseApiUrl: Ref<string> = ref("http://localhost:8000/api")
 const baseApiUrlError = ref(false)
 const showSettingsModal = ref(false)
 

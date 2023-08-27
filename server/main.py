@@ -26,27 +26,27 @@ app.add_middleware(
 ml_service = MLService("./model/best_fast_text.model")
 
 
-@app.get("/check")
+@app.get("/api/check")
 def check():
     return "Success"
 
 
-@app.get("/search")
+@app.get("/api/search")
 async def search(query: str):
     return await ml_service.search_address(fix_lang_text_problems(query, "./utils/dict.txt"))
 
 
-@app.get("/autocomplete")
+@app.get("/api/autocomplete")
 async def autocomplete(query: str):
     return await ml_service.search_address(fix_lang_text_problems(query, "./utils/dict.txt"))
 
 
-@app.post("/package_search")
+@app.post("/api/package_search")
 def package_search(data: PackageSearchDTO):
     return data.values
 
 
-@app.post("/file_process")
+@app.post("/api/file_process")
 async def file_process(file: UploadFile):
     if file.filename.split(".")[-1] == "txt":
         content = (await file.read()).decode("utf-8").replace("\r", "").split("\n")

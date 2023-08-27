@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ml_service = MLService("./model/best_fast_text.model")
+ml_service = MLService("./model/512_new_fasttext.model")
 
 
 @app.get("/api/check")

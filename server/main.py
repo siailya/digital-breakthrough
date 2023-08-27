@@ -46,7 +46,7 @@ async def search(query: str):
 @app.get("/api/autocomplete")
 async def autocomplete(query: str):
     result = await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
-    return list(map(lambda x: x["full_address"], result))
+    return list(map(lambda x: x["target_address"], result))
 
 
 @app.post("/api/package_search")

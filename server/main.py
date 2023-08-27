@@ -11,7 +11,7 @@ from utils.language_utils import fix_lang_text_problems
 
 load_dotenv()
 
-app = FastAPI(docs_url="/api/docs")
+app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 origins = ["*"]
 

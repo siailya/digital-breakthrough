@@ -6,6 +6,8 @@ services:
     build: server/.
     ports:
       - "8000:8000"
+    volumes:
+      - "./server/model:/app/model"
 
   aam-client:
     container_name: aam-client

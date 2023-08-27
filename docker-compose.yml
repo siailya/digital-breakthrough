@@ -3,12 +3,23 @@ version: "3.9"
 services:
   amm-server:
     container_name: amm-server
-    image: siailyadev/amm-server:0.0.1
+    image: siailyadev/amm-server:0.0.2
     ports:
-      - "8000:8000"
+      - "8001:8000"
+    volumes:
+      - amm_model:/app/model
 
   aam-client:
     container_name: aam-client
-    image: siailyadev/amm-client:0.0.1
+    image: siailyadev/amm-client:0.0.2
     ports:
       - "3000:80"
+
+
+volumes:
+  amm_model:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/root/model'

@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ml_service = MLService()
+ml_service = MLService("./model/best_fast_text.model")
 
 
 @app.get("/check")

@@ -33,7 +33,8 @@ class FeatureExtractor:
                  town_index_path: str,
                  district_index_path: str,
                  street_abbv_index_path: str,
-                 town_abbv_index_path: str
+                 town_abbv_index_path: str,
+                 area_type_index_path: str
                  ) -> None:
 
         morph_vocab = MorphVocab()
@@ -43,9 +44,12 @@ class FeatureExtractor:
         self.district_index = pd.read_csv(district_index_path)
         street_abbv_index = pd.read_csv(street_abbv_index_path).dropna()
         town_abbv_index = pd.read_csv(town_abbv_index_path).dropna()
+        area_type_index = pd.read_csv(area_type_index_path).dropna()
         self.abbv_map = {row["short_name"]: row["name"] for ind, row in street_abbv_index.iterrows()}
         town_abbv_map = {row["short_name"]: row["name"] for ind, row in town_abbv_index.iterrows()}
+        area_type_map = {row["short_name"]: row["name"] for ind, row in area_type_index.iterrows()}
         self.abbv_map.update(town_abbv_map)
+        self.abbv_map.update(area_type_map)
         custom_map = {
             "г.": "город",
             "гор.": "город",

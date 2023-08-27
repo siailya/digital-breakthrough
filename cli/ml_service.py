@@ -16,7 +16,8 @@ class MLService:
             district_index_path="data/additional_data/district_20230808.csv",
             street_abbv_index_path="data/additional_data/geonimtype_20230808.csv",
             town_abbv_index_path="data/additional_data/subrf_20230808.csv",
-            building_index_path="data/additional_data/building_20230808.csv"
+            building_index_path="data/additional_data/building_20230808.csv",
+            area_type_index_path="data/additional_data/areatype_20230808.csv"
         )
 
     def _search_addresses(self, address: str, limit: int):

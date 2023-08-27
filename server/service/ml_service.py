@@ -1,7 +1,6 @@
 import asyncio
-import time
 
-from server.utils.fast_text_wrapper import FastTextWrapper
+from utils.fast_text_wrapper import FastTextWrapper
 
 
 class MLService:

@@ -33,17 +33,22 @@ def check():
 
 @app.get("/api/search")
 async def search(query: str):
-    return await ml_service.search_address(fix_lang_text_problems(query, "./utils/dict.txt"))
+    return await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
 
 
 @app.get("/api/autocomplete")
 async def autocomplete(query: str):
-    return await ml_service.search_address(fix_lang_text_problems(query, "./utils/dict.txt"))
+    result = await ml_service.search_addresses(fix_lang_text_problems(query, "./utils/dict.txt"))
+    return list(map(lambda x: x["full_address"], result))
 
 
 @app.post("/api/package_search")
-def package_search(data: PackageSearchDTO):
-    return data.values
+async def package_search(data: PackageSearchDTO):
+    result = []
+    for address in data.values:
+        result.append({"query": address, "result": await search(address)})
+
+    return result
 
 
 @app.post("/api/file_process")
@@ -59,7 +64,7 @@ async def file_process(file: UploadFile):
     for address in content:
         result.append({
             "original_address": address,
-            "search_results": await ml_service.search_address(fix_lang_text_problems(address, "./utils/dict.txt"))
+            "search_results": await ml_service.search_addresses(fix_lang_text_problems(address, "./utils/dict.txt"))
         })
 
     return result

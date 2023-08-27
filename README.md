@@ -8,7 +8,6 @@
 
 - Веб-демо: https://amm.flint3s.ru/
 - API: https://amm.flint3s.ru/api
-- Swagger: https://amm.flint3s.ru/api/docs
 
 ## Запуск и деплой
 
@@ -41,6 +40,9 @@ pip install -r requirements.txt
 
 Так же для запуска необходимо скачать модель (см. пункт "Запуск и деплой") и поместить её в папку `server/model`. После
 этого можно запускать сервер в своем окружении: `python ./main.py`
+
+После запуска серверная часть будет доступна по адресу `http://localhost:8000`, а также Swagger по
+адресу `http://localhost:8000/api/docs`
 
 ## Веб-приложение
 

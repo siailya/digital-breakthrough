@@ -45,7 +45,7 @@ async def autocomplete(query: str):
 @app.post("/api/package_search")
 async def package_search(data: PackageSearchDTO):
     result = []
-    for address in data.values:
+    for address in filter(lambda x: x != '', data.values):
         result.append({"query": address, "result": await search(address)})
 
     return result

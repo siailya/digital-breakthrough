@@ -69,10 +69,10 @@ def fix_lang_text_problems(text: str, dict_path="dict.txt"):
     addresses_dict = set(list(map(lambda x: x.replace("\n", ""),
                                   open(os.path.abspath(dict_path), "r", encoding="u8").readlines())))
 
-    if detect_transliteration(text, addresses_dict):
-        return transliterate_to_russian(text)
-
     if detect_keyboard_mismatch(text, addresses_dict):
         return transform_layout(text)
+
+    if detect_transliteration(text, addresses_dict):
+        return transliterate_to_russian(text)
 
     return text

@@ -19,14 +19,16 @@ class FastTextWrapper:
                  district_index_path: str,
                  street_abbv_index_path: str,
                  town_abbv_index_path: str,
-                 building_index_path: str
+                 building_index_path: str,
+                 area_type_index_path: str
                  ) -> None:
 
         self.ext = FeatureExtractor(
             town_index_path=town_index_path,
             district_index_path=district_index_path,
             street_abbv_index_path=street_abbv_index_path,
-            town_abbv_index_path=town_abbv_index_path
+            town_abbv_index_path=town_abbv_index_path,
+            area_type_index_path=area_type_index_path
         )
         self.building = pd.read_csv(building_index_path)
         print("Buildings data loaded")

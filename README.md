@@ -17,7 +17,7 @@
 
 1. Скачать предобученную модель и
    вектора: https://drive.google.com/drive/folders/1BPg1wA6gAyfgf1rH8Bc15cFobZVoufbj?usp=sharing
-2. Поместить файлы `best_fast_text.model` и `best_fast_text.model.wv.vectors_ngrams.npy` в папку `server/model`
+2. Поместить файлы `512_new_fasttext.model` и `512_new_fasttext.model.wv.vectors_ngrams.npy` в папку `server/model`
 3. Запустить docker-контейнеры: ` docker-compose -f docker-compose.dev-images.yml up -d`
 4. Дождаться инициализации модели
 
